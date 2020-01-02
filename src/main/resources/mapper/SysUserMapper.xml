@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mp.mybatis.mapper.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.mp.mybatis.entity.SysUser">
+    <id column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="uname" jdbcType="VARCHAR" property="uname" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    uid, uname, password, email, mobile, address, is_delete
+  </sql>
+  <select id="findAll" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select  *   from sys_user
+  </select>
+</mapper>
