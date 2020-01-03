@@ -1,6 +1,7 @@
 package com.mp.mybatis.service.impl;
 
 import com.mp.mybatis.config.TargetDataSource;
+import com.mp.mybatis.datasource.DataSourceType;
 import com.mp.mybatis.entity.SysUser;
 import com.mp.mybatis.mapper.SysUserMapper;
 import com.mp.mybatis.service.UserService;
@@ -14,7 +15,7 @@ public class UserServiceImpl implements UserService {
     SysUserMapper sysUserMapper;
 
     @Override
-    @TargetDataSource("datasource1")
+    @TargetDataSource(DataSourceType.MASTER)
     public List<SysUser> listAll() {
 
         return sysUserMapper.findAll();

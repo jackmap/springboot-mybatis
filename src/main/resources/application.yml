@@ -9,18 +9,16 @@ spring:
           # 主库数据源
           master:
               driverClassName: org.postgresql.Driver
-              jdbc-url: jdbc:postgresql://117.158.175.178:5432/weiku-test
+              url: jdbc:postgresql://117.158.175.178:5432/weiku-test
               username: postgres
               password: W19k4u21798de
-
-
 
           # 从库数据源
           slave:
                 # 从数据源开关/默认关闭
                 enabled: true
                 driverClassName: com.mysql.cj.jdbc.Driver
-                jdbc-url: jdbc:mysql://117.158.175.178:3306/logistic?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&allowMultiQueries=true
+                url: jdbc:mysql://117.158.175.178:3306/logistic?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
                 username: root
                 password: W19k4u21798de
 

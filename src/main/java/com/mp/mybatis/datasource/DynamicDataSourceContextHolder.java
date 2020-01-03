@@ -11,10 +11,6 @@ import org.slf4j.LoggerFactory;
 public class DynamicDataSourceContextHolder {
     public static final Logger log = LoggerFactory.getLogger(DynamicDataSourceContextHolder.class);
 
-    /**
-     * 默认数据源
-     */
-    public static final String DEFAULT_DS = "datasource1";
 
     /**
      * 使用ThreadLocal维护变量，ThreadLocal为每个使用该变量的线程提供独立的变量副本，

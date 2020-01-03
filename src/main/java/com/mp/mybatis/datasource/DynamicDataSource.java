@@ -11,10 +11,16 @@ import java.util.Map;
 public class DynamicDataSource extends AbstractRoutingDataSource
 {
 
+    public DynamicDataSource(DataSource defaultTargetDataSource, Map<Object, Object> targetDataSources)
+    {
+        super.setDefaultTargetDataSource(defaultTargetDataSource);
+        super.setTargetDataSources(targetDataSources);
+        super.afterPropertiesSet();
+    }
+
     @Override
     protected Object determineCurrentLookupKey()
     {
-        System.out.println("数据源为"+DynamicDataSourceContextHolder.getDateSoureType());
         return DynamicDataSourceContextHolder.getDateSoureType();
     }
 }

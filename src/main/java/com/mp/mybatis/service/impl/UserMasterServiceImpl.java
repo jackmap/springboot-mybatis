@@ -2,6 +2,7 @@ package com.mp.mybatis.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mp.mybatis.config.TargetDataSource;
+import com.mp.mybatis.datasource.DataSourceType;
 import com.mp.mybatis.entity.SysUser;
 import com.mp.mybatis.mapper.SysUserMapper;
 import com.mp.mybatis.service.UserMasterService;
@@ -17,7 +18,7 @@ public class UserMasterServiceImpl implements UserMasterService {
     SysUserMapper sysUserMapper;
 
     @Override
-    @TargetDataSource("datasource2")
+    @TargetDataSource(DataSourceType.SLAVE)
     public List<SysUser> listAll() {
         return sysUserMapper.findAll();
     }

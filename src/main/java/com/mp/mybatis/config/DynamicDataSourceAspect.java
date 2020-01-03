@@ -1,50 +1,59 @@
 package com.mp.mybatis.config;
 
+import com.mp.mybatis.datasource.DynamicDataSource;
 import com.mp.mybatis.datasource.DynamicDataSourceContextHolder;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
 import java.lang.reflect.Method;
+
 /**
- * 自定义注解 + AOP的方式实现数据源动态切换。
- * Created by pure on 2018-05-06.
+ * 多数据源处理
+ *
+ * @author zrsupply
  */
 @Aspect
+@Order(1)
 @Component
-public class DynamicDataSourceAspect {
+public class DynamicDataSourceAspect
+{
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Before("@annotation(TargetDataSource)")
-    public void beforeSwitchDS(JoinPoint point) {
-        //获得当前访问的class
-        Class<?> className = point.getTarget().getClass();
-        //获得访问的方法名
-        String methodName = point.getSignature().getName();
-        //得到方法的参数的类型
-        Class[] argClass = ((MethodSignature) point.getSignature()).getParameterTypes();
-        String dataSource = DynamicDataSourceContextHolder.DEFAULT_DS;
-        try {
-            // 得到访问的方法对象
-            Method method = className.getMethod(methodName, argClass);
-            // 判断是否存在@DS注解
-            if (method.isAnnotationPresent(TargetDataSource.class)) {
-                TargetDataSource annotation = method.getAnnotation(TargetDataSource.class);
-                // 取出注解中的数据源名
-                dataSource = annotation.value();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Pointcut("@annotation(com.mp.mybatis.config.TargetDataSource)")
+    public void dsPointCut()
+    {
+
+    }
+
+    @Around("dsPointCut()")
+    public Object around(ProceedingJoinPoint point) throws Throwable
+    {
+        MethodSignature signature = (MethodSignature) point.getSignature();
+
+        Method method = signature.getMethod();
+
+        TargetDataSource dataSource = method.getAnnotation(TargetDataSource.class);
+
+        if (!StringUtils.isEmpty(dataSource))
+        {
+            DynamicDataSourceContextHolder.setDateSoureType(dataSource.value().name());
         }
-        // 切换数据源
-        DynamicDataSourceContextHolder.setDateSoureType(dataSource);
+
+        try
+        {
+            return point.proceed();
+        }
+        finally
+        {
+            // 销毁数据源 在执行方法之后
+            DynamicDataSourceContextHolder.clearDateSoureType();
+        }
     }
-
-    @After("@annotation(TargetDataSource)")
-    public void afterSwitchDS(JoinPoint point) {
-        DynamicDataSourceContextHolder.clearDateSoureType();
-
-    }
-
 }

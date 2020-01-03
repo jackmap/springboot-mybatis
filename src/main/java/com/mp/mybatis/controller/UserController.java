@@ -23,7 +23,6 @@ public class UserController {
     private UserMasterService userMasterService;
 
     @GetMapping("/user")
-   // @TargetDataSource(DataSourceType.MASTER)
     public ResponseEntity<Object> listAll(){
         List<SysUser> result = userService.listAll();
         return ResponseEntity.ok(result);
@@ -31,7 +30,6 @@ public class UserController {
     }
 
     @GetMapping("/user1")
-  //  @TargetDataSource(DataSourceType.SLAVE)
     public ResponseEntity<Object> listAlla() {
         List<SysUser> result = userMasterService.listAll();
         return ResponseEntity.ok(result);
